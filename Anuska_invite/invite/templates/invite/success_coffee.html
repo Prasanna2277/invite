@@ -1,0 +1,29 @@
+{% extends 'invite/base.html' %}
+{% block title %}☕ It’s a Date{% endblock %}
+
+{% block content %}
+<div class="card">
+  <span class="confetti-text">☕🎉</span>
+  <span class="emoji-big">☕✨</span>
+  <div class="badge">Plan B Success</div>
+  
+  <h1>Finally 😌</h1>
+  
+  <p class="subtitle">
+    Coffee it is ☕<br>
+    No books, no stress 😏<br><br>
+    Just good vibes and better company 🙂<br>
+    (and maybe some unnecessary talks)
+  </p>
+
+  <div class="btn-row">
+    <a href="{% url 'logout' %}" class="btn btn-primary">
+      Close this tab 🚪
+    </a>
+  </div>
+
+  <p class="footer-hint">
+    Smart decision. Proud of you 😌
+  </p>
+</div>
+{% endblock %}
