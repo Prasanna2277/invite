@@ -1,0 +1,25 @@
+{% extends 'invite/base.html' %}
+{% block title %}🎉 Yes!!{% endblock %}
+
+{% block content %}
+<div class="card">
+  <span class="confetti-text">🎉</span>
+  <span class="emoji-big">📚✨</span>
+  <div class="badge">Achievement Unlocked</div>
+  <h1>Good choice.</h1>
+  <p class="subtitle">
+    Productivity unlocked 💯<br>
+    See you in library 😌<br><br>
+    I promise I'll only disturb you<br>
+    <em>occasionally</em> 🙂
+  </p>
+
+  <div class="btn-row">
+    <a href="{% url 'logout' %}" class="btn btn-primary">
+      Close this tab 🚪
+    </a>
+  </div>
+
+  <p class="footer-hint">A confirmation email has been sent ✉️</p>
+</div>
+{% endblock %}

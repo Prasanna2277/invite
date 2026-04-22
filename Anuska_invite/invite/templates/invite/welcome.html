@@ -1,0 +1,43 @@
+{% extends 'invite/base.html' %}
+{% block title %}🔐 Who are you?{% endblock %}
+
+{% block content %}
+<div class="card">
+  <span class="emoji-big">🎂</span>
+  <h1>Hello, stranger…</h1>
+  <p class="subtitle">
+    This is a very private page.<br>
+    To enter, prove you're the right person.<br>
+    <strong>Enter your special date 🎂</strong>
+  </p>
+
+  {% if error %}
+  <div class="error-banner">{{ error }}</div>
+  {% endif %}
+
+  <form method="POST" action="{% url 'login' %}">
+    {% csrf_token %}
+    <div class="input-group">
+      <label>Day &amp; Month</label>
+      <div class="input-row">
+        <input
+          type="number" name="day"
+          placeholder="Day (e.g. 17)"
+          min="1" max="31" required
+          autofocus
+        />
+        <input
+          type="text" name="month"
+          placeholder="Month (e.g. September)"
+          required
+        />
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-full">
+      Unlock ✨
+    </button>
+  </form>
+
+  <p class="footer-hint">If you don't know the date, you probably shouldn't be here 👀</p>
+</div>
+{% endblock %}

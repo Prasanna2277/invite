@@ -1,0 +1,39 @@
+{% extends 'invite/base.html' %}
+{% block title %}😐 Getting serious{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="step-indicator">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+  </div>
+
+  <span class="emoji-big">😐</span>
+  <h2>This is getting serious…</h2>
+  <p class="subtitle">
+    Think again 😐<br>
+    I even made a whole website for this.<br>
+    A <strong>whole website</strong>.
+  </p>
+
+  <form method="POST" action="{% url 'step4' %}">
+    {% csrf_token %}
+    <div class="btn-row">
+      <button type="submit" name="answer" value="yes" class="btn btn-yes">
+        Okay library 👍
+      </button>
+      <button
+        type="submit" name="answer" value="no"
+        formaction="{% url 'loading' %}?next=step5"
+        class="btn btn-no"
+      >
+        NO 😑
+      </button>
+    </div>
+  </form>
+  <p class="footer-hint">One more no and we activate Plan B ☕</p>
+</div>
+{% endblock %}

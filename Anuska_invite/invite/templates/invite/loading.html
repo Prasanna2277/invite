@@ -1,0 +1,60 @@
+{% extends 'invite/base.html' %}
+{% block title %}🤖 Analyzing…{% endblock %}
+
+{% block extra_head %}
+<style>
+  .loading-messages { margin: 1rem 0; min-height: 1.5rem; }
+  .loading-msg { display: none; color: var(--text-mid); font-size: 0.88rem; }
+  .loading-msg.visible { display: block; animation: fadeMsg 0.4s ease; }
+  @keyframes fadeMsg { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform: translateY(0); } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <span class="loader-emoji">⚙️</span>
+  <h2>Analyzing your decision…</h2>
+
+  <div class="loading-messages">
+    <p class="loading-msg" id="msg0">Running sentiment analysis 🧠</p>
+    <p class="loading-msg" id="msg1">Consulting the stars ⭐</p>
+    <p class="loading-msg" id="msg2">Checking friendship compatibility 💜</p>
+    <p class="loading-msg" id="msg3">Almost there… 🚀</p>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill"></div></div>
+  <p class="footer-hint">Please wait while we process your life choices 😌</p>
+</div>
+
+<script>
+  (function() {
+    const steps = [
+      { id: 'msg0', delay: 0 },
+      { id: 'msg1', delay: 700 },
+      { id: 'msg2', delay: 1400 },
+      { id: 'msg3', delay: 2000 },
+    ];
+    steps.forEach(function(s) {
+      setTimeout(function() {
+        document.querySelectorAll('.loading-msg').forEach(function(el) {
+          el.classList.remove('visible');
+        });
+        document.getElementById(s.id).classList.add('visible');
+      }, s.delay);
+    });
+
+    /* ── Figure out where to go next ── */
+    var nextStep = '{{ next_step }}';
+    var urlMap = {
+      'step3': '{% url "step3" %}',
+      'step4': '{% url "step4" %}',
+      'step5': '{% url "step5" %}',
+    };
+    var dest = urlMap[nextStep] || '{% url "step3" %}';
+
+    setTimeout(function() {
+      window.location.href = dest;
+    }, 2700);
+  })();
+</script>
+{% endblock %}

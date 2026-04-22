@@ -1,0 +1,62 @@
+{% extends 'invite/base.html' %}
+{% block title %}☕ Plan B{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="step-indicator">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+  </div>
+
+  <span class="emoji-big">☕</span>
+  <div class="badge">Plan B Activated</div>
+  <h2>Alright… last resort.</h2>
+  <p class="subtitle">
+    Will you come for coffee instead? ☕<br>
+    No books, no notes, no studying.<br>
+    Just coffee. And good company 🙂
+  </p>
+
+  <form method="POST" action="{% url 'step5' %}">
+    {% csrf_token %}
+    <div class="btn-row" style="position: relative; height: 120px;">
+      <button type="submit" name="answer" value="yes" class="btn btn-yes">
+        YES ☕
+      </button>
+      <button type="button" id="noBtn" class="btn btn-no">
+        NO 💀
+      </button>
+    </div>
+  </form>
+  <p class="footer-hint">The 💀 button is very dramatic. Please reconsider.</p>
+</div>
+<script>
+const noBtn = document.getElementById("noBtn");
+
+document.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
+
+    const distance = Math.hypot(
+        e.clientX - (rect.left + rect.width / 2),
+        e.clientY - (rect.top + rect.height / 2)
+    );
+
+    if (distance < 120) {
+        const parent = noBtn.parentElement;
+
+        const maxX = parent.offsetWidth - rect.width;
+        const maxY = parent.offsetHeight - rect.height;
+
+        const newX = Math.random() * maxX;
+        const newY = Math.random() * maxY;
+
+        noBtn.style.position = "absolute";
+        noBtn.style.left = newX + "px";
+        noBtn.style.top = newY + "px";
+    }
+});
+</script>
+{% endblock %}

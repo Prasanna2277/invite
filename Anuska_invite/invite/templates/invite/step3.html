@@ -1,0 +1,39 @@
+{% extends 'invite/base.html' %}
+{% block title %}🤔 Are you sure?{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="step-indicator">
+    <div class="step-dot done"></div>
+    <div class="step-dot done"></div>
+    <div class="step-dot active"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+
+  <span class="emoji-big">🤔</span>
+  <h2>Are you sure?</h2>
+  <p class="subtitle">
+    I'll not disturb you… much 😌<br>
+    We'll just sit, study, and maybe<br>
+    share notes. That's it. Probably.
+  </p>
+
+  <form method="POST" action="{% url 'step3' %}">
+    {% csrf_token %}
+    <div class="btn-row">
+      <button type="submit" name="answer" value="yes" class="btn btn-yes">
+        Okay fine 🙂
+      </button>
+      <button
+        type="submit" name="answer" value="no"
+        formaction="{% url 'loading' %}?next=step4"
+        class="btn btn-no"
+      >
+        Still no 😤
+      </button>
+    </div>
+  </form>
+  <p class="footer-hint">The "Still no" button leads somewhere… interesting 👀</p>
+</div>
+{% endblock %}
