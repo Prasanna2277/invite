@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -131,3 +132,7 @@ RECIPIENT_EMAIL = os.getenv("RECIPIENT_EMAIL")
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_AGE = 86400
 SESSION_SAVE_EVERY_REQUEST = True
+
+ALLOWED_HOSTS = ['*']
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
