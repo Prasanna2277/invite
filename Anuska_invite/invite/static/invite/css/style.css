@@ -95,6 +95,8 @@ body {
   text-align: center;
   animation: cardIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
   transition: all 0.3s ease;
+  overflow-x: hidden;          /* 🔥 prevents horizontal overflow */
+  word-break: break-word;      /* 🔥 text wraps inside box */
 }
 
 @keyframes cardIn {
@@ -107,6 +109,7 @@ h1, h2 {
   font-family: 'Playfair Display', serif;
   line-height: 1.25;
   margin-bottom: 0.5rem;
+  max-width: 100%;
 }
 
 h1 { font-size: clamp(1.7rem, 5vw, 2.2rem); color: var(--text-dark); }
@@ -132,13 +135,14 @@ h2 { font-size: clamp(1.3rem, 4vw, 1.7rem); color: var(--text-dark); }
   to   { opacity: 1; transform: scale(1);   }
 }
 
-/* ── Buttons ─────────────────────────────────────────────────────────────── */
+/* ── Buttons + Inputs (full containment) ─────────────────────────────────── */
 .btn-row {
   display: flex;
   gap: 0.8rem;
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 1.5rem;
+  width: 100%;
 }
 
 .btn {
@@ -155,6 +159,9 @@ h2 { font-size: clamp(1.3rem, 4vw, 1.7rem); color: var(--text-dark); }
   letter-spacing: 0.02em;
   position: relative;
   overflow: hidden;
+  max-width: 100%;           /* 🔥 buttons never exceed container */
+  white-space: normal;       /* allows text wrapping on long labels */
+  word-break: keep-all;
 }
 
 .btn::after {
@@ -193,12 +200,15 @@ h2 { font-size: clamp(1.3rem, 4vw, 1.7rem); color: var(--text-dark); }
 .btn-full {
   width: 100%;
   padding: 0.9rem 2rem;
+  max-width: 100%;
 }
 
 /* ── Input ───────────────────────────────────────────────────────────────── */
 .input-group {
   margin: 1.5rem 0;
   text-align: left;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .input-group label {
@@ -214,10 +224,14 @@ h2 { font-size: clamp(1.3rem, 4vw, 1.7rem); color: var(--text-dark); }
 .input-row {
   display: flex;
   gap: 0.7rem;
+  flex-wrap: wrap;           /* 🔥 if two inputs, they stack on narrow screens */
 }
 
-.input-row input {
+.input-row input,
+.input-row select,
+.input-row .month-picker {   /* cover any month button/select */
   flex: 1;
+  min-width: 120px;          /* prevents collapse, but allows wrap */
   font-family: 'Poppins', sans-serif;
   font-size: 1rem;
   padding: 0.75rem 1.1rem;
@@ -227,9 +241,11 @@ h2 { font-size: clamp(1.3rem, 4vw, 1.7rem); color: var(--text-dark); }
   color: var(--text-dark);
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
+  max-width: 100%;
 }
 
-.input-row input:focus {
+.input-row input:focus,
+.input-row select:focus {
   border-color: var(--pink-deep);
   box-shadow: 0 0 0 3px rgba(236,72,153,0.12);
 }
@@ -246,6 +262,7 @@ h2 { font-size: clamp(1.3rem, 4vw, 1.7rem); color: var(--text-dark); }
   color: #9f1239;
   margin-bottom: 1.2rem;
   animation: shake 0.4s ease;
+  word-break: break-word;
 }
 
 @keyframes shake {
@@ -312,6 +329,9 @@ h2 { font-size: clamp(1.3rem, 4vw, 1.7rem); color: var(--text-dark); }
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 1rem;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow-x: auto;          /* allow horizontal scroll if absolutely needed, but keeps inside */
 }
 
 .step-indicator {
@@ -319,6 +339,7 @@ h2 { font-size: clamp(1.3rem, 4vw, 1.7rem); color: var(--text-dark); }
   justify-content: center;
   gap: 0.4rem;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .step-dot {
@@ -411,12 +432,42 @@ h2 { font-size: clamp(1.3rem, 4vw, 1.7rem); color: var(--text-dark); }
   }
 }
 
-/* Extra small devices (tight spacing) */
+/* Extra small devices (tight spacing) - critical for month button fix */
 @media (max-width: 480px) {
-  .card { padding: 2rem 1.5rem; }
-  .btn  { padding: 0.7rem 1.4rem; font-size: 0.88rem; }
-  .btn-row { gap: 0.6rem; }
-  .input-row input { padding: 0.7rem 0.9rem; }
-  .emoji-big { font-size: 2.5rem; }
-  .subtitle { margin: 0.6rem 0 1.5rem; }
+  .card { 
+    padding: 2rem 1.2rem;   /* slightly tighter but safe */
+  }
+  .btn { 
+    padding: 0.7rem 1.2rem; 
+    font-size: 0.85rem; 
+    width: auto;
+    min-width: 110px;
+  }
+  .btn-row { 
+    gap: 0.5rem; 
+  }
+  .input-row input, 
+  .input-row select,
+  .input-row .month-picker {
+    padding: 0.65rem 0.8rem;
+    font-size: 0.9rem;
+    min-width: 100px;
+  }
+  .emoji-big { 
+    font-size: 2.3rem; 
+  }
+  .subtitle { 
+    margin: 0.6rem 0 1.2rem; 
+  }
+  .badge {
+    white-space: normal;    /* 🔥 month button inside badge? allow wrap */
+    font-size: 0.7rem;
+    padding: 0.25rem 0.8rem;
+  }
+  /* any extra custom month button will be contained */
+  button, .btn, .month-btn, [class*="month"] {
+    max-width: 100%;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+  }
 }
