@@ -94,6 +94,7 @@ body {
   width: 100%;
   text-align: center;
   animation: cardIn 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+  transition: all 0.3s ease;
 }
 
 @keyframes cardIn {
@@ -336,8 +337,86 @@ h2 { font-size: clamp(1.3rem, 4vw, 1.7rem); color: var(--text-dark); }
   color: var(--text-light);
 }
 
-/* ── Responsive ──────────────────────────────────────────────────────────── */
+/* ========== RESPONSIVE ENHANCEMENTS (laptop, tablet, mobile) ========== */
+/* Tablet & small laptop */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .card {
+    max-width: 540px;
+    padding: 2.8rem 2.5rem;
+  }
+  .btn {
+    padding: 0.8rem 2rem;
+    font-size: 0.98rem;
+  }
+  .subtitle {
+    font-size: 1rem;
+  }
+  .heart {
+    font-size: 1.5rem;
+  }
+}
+
+/* Laptop & desktop screens (≥1024px) */
+@media (min-width: 1024px) {
+  .card {
+    max-width: 620px;
+    padding: 3.5rem 3.2rem;
+    box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.9);
+  }
+  h1 {
+    font-size: 2.5rem;
+  }
+  h2 {
+    font-size: 1.9rem;
+  }
+  .subtitle {
+    font-size: 1.05rem;
+    margin: 1rem 0 2rem;
+  }
+  .btn {
+    padding: 0.9rem 2.5rem;
+    font-size: 1rem;
+  }
+  .emoji-big {
+    font-size: 4rem;
+  }
+  .input-row input {
+    font-size: 1.05rem;
+    padding: 0.85rem 1.2rem;
+  }
+  .heart {
+    font-size: 1.8rem;
+  }
+  .badge {
+    font-size: 0.85rem;
+    padding: 0.35rem 1.2rem;
+  }
+  .step-dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Large desktop (extra spacing) */
+@media (min-width: 1440px) {
+  .card {
+    max-width: 680px;
+    padding: 4rem 3.8rem;
+  }
+  h1 {
+    font-size: 2.8rem;
+  }
+  .subtitle {
+    font-size: 1.1rem;
+  }
+}
+
+/* Extra small devices (tight spacing) */
 @media (max-width: 480px) {
   .card { padding: 2rem 1.5rem; }
   .btn  { padding: 0.7rem 1.4rem; font-size: 0.88rem; }
+  .btn-row { gap: 0.6rem; }
+  .input-row input { padding: 0.7rem 0.9rem; }
+  .emoji-big { font-size: 2.5rem; }
+  .subtitle { margin: 0.6rem 0 1.5rem; }
 }
