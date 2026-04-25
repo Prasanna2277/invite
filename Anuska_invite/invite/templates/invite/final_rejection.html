@@ -1,0 +1,34 @@
+{% extends 'invite/base.html' %}
+{% block title %}💔 Rejected{% endblock %}
+
+{% block content %}
+<div class="card">
+  <span class="emoji-big">💔</span>
+  <div class="badge">Mission Failed</div>
+  
+  <h1>That hurts 😔</h1>
+  
+  <p class="subtitle">
+    Rejection accepted... with dignity<br>
+    But this deserves a reaction 👇
+  </p>
+
+  <!-- 🎬 VIDEO INSIDE BOX -->
+  <div style="margin: 20px 0;">
+    <video width="100%" controls autoplay>
+      <source src="/static/invite/video/vid.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <div class="btn-row">
+    <a href="{% url 'logout' %}" class="btn btn-primary">
+      Close this tab 🚪
+    </a>
+  </div>
+
+  <p class="footer-hint">
+    Respectfully rejected... but not forgotten 😌
+  </p>
+</div>
+{% endblock %}

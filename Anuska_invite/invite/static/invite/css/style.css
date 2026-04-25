@@ -471,3 +471,19 @@ h2 { font-size: clamp(1.3rem, 4vw, 1.7rem); color: var(--text-dark); }
     text-overflow: ellipsis;
   }
 }
+/* ── Video Container (Responsive) ───────────────────────────── */
+.video-container {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.video-container video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+  object-fit: cover;
+}

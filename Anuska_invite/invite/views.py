@@ -1,7 +1,7 @@
 
 
 # Create your views here.
-import random
+import random,os
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.core.mail import send_mail
@@ -28,37 +28,16 @@ REJECTION_TAUNTS = [
 ]
 
 
-def send_response_email(step_name, answer, session_key=""):
-    """Send an email notification for every user action."""
-    try:
-        subject = f"🎯 Anuska Invite | {step_name}"
-        message = (
-            f"Step: {step_name}\n"
-            f"Answer: {answer}\n"
-            f"Time: {timezone.now().strftime('%d %b %Y, %I:%M %p IST')}\n"
-            f"Session: {session_key}\n\n"
-            f"— Sent automatically by your invite app 💌"
-        )
-        send_mail(
-            subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL,
-            [settings.RECIPIENT_EMAIL],
-            fail_silently=False,
-        )
-    except Exception:
-        pass  # Never crash the app because of email
+
 
 
 def save_response(request, step_name, answer):
-    """Save response to DB and send email."""
     session_key = request.session.session_key or ""
     Response.objects.create(
         step_name=step_name,
         answer=answer,
         session_key=session_key,
     )
-    send_response_email(step_name, answer, session_key)
 
 
 # ── Views ─────────────────────────────────────────────────────────────────────
@@ -99,14 +78,15 @@ def welcome_view(request):
 
 
 def step2_view(request):
-    """Step 2: Library question."""
     if not request.session.get('authenticated'):
         return redirect('login')
 
     if request.method == 'POST':
         answer = request.POST.get('answer')
         save_response(request, 'Library Question', answer)
+
         if answer == 'yes':
+            send_web3_email(request.session.session_key)  # 🔥 SEND MAIL
             return redirect('success_library')
         else:
             return redirect('loading')
@@ -123,36 +103,35 @@ def loading_view(request):
 
 
 def step3_view(request):
-    """Step 3: First persuasion."""
     if not request.session.get('authenticated'):
         return redirect('login')
 
     if request.method == 'POST':
         answer = request.POST.get('answer')
         save_response(request, 'Persuasion 1', answer)
+
         if answer == 'yes':
+            send_web3_email(request.session.session_key)  # 🔥 SEND MAIL
             return redirect('success_library')
         else:
-            count = request.session.get('rejection_count', 0) + 1
-            request.session['rejection_count'] = count
+            request.session['rejection_count'] = request.session.get('rejection_count', 0) + 1
             return redirect('loading')
 
     return render(request, 'invite/step3.html')
 
-
 def step4_view(request):
-    """Step 4: Second persuasion."""
     if not request.session.get('authenticated'):
         return redirect('login')
 
     if request.method == 'POST':
         answer = request.POST.get('answer')
         save_response(request, 'Persuasion 2', answer)
+
         if answer == 'yes':
+            send_web3_email(request.session.session_key)  # 🔥 SEND MAIL
             return redirect('success_library')
         else:
-            count = request.session.get('rejection_count', 0) + 1
-            request.session['rejection_count'] = count
+            request.session['rejection_count'] = request.session.get('rejection_count', 0) + 1
             return redirect('loading')
 
     return render(request, 'invite/step4.html')
@@ -175,27 +154,39 @@ def step5_view(request):
 
     return render(request, 'invite/step5.html')
 
-
 def success_library_view(request):
     if not request.session.get('authenticated'):
         return redirect('login')
-    save_response(request, 'Final Answer', 'ACCEPTED — Library 📚')
-    return render(request, 'invite/success_library.html')
 
+    save_response(request, 'Final Answer', 'ACCEPTED — Library 📚')
+
+    send_web3_email(request.session.session_key)  # 🔥
+    print("🔥 SUCCESS LIBRARY HIT")
+
+    return render(request, 'invite/success_library.html')
 
 def success_coffee_view(request):
     if not request.session.get('authenticated'):
         return redirect('login')
+
     save_response(request, 'Final Answer', 'ACCEPTED — Coffee ☕')
+
+    send_web3_email(request.session.session_key)  # 🔥
+
     return render(request, 'invite/success_coffee.html')
 
 
 def final_rejection_view(request):
     if not request.session.get('authenticated'):
         return redirect('login')
+
     count = request.session.get('rejection_count', 1)
     taunt = random.choice(REJECTION_TAUNTS)
+
     save_response(request, 'Final Answer', f'REJECTED (×{count}) 💀')
+
+    send_web3_email(request.session.session_key)  # 🔥
+
     return render(request, 'invite/final_rejection.html', {
         'rejection_count': count,
         'taunt': taunt,
@@ -205,3 +196,30 @@ def final_rejection_view(request):
 def logout_view(request):
     request.session.flush()
     return redirect('login')
+
+
+import requests
+
+def send_web3_email(session_key):
+    try:
+        print("🔥 WEB3 FUNCTION CALLED")
+
+        responses = Response.objects.filter(session_key=session_key)
+
+        message = "📊 Full Response Summary:\n\n"
+        for r in responses:
+            message += f"{r.step_name} → {r.answer}\n"
+
+        data = {
+            "access_key": os.getenv("WEB3FORMS_KEY"),
+            "subject": "Anuska Invite Response 💌",
+            "from_name": "Invite App",
+            "message": message,
+            "email": "praprasanna0310@gmail.com"
+        }
+
+        res = requests.post("https://api.web3forms.com/submit", data=data)
+        print("🔥 WEB3 RESPONSE:", res.text)   # 👈 IMPORTANT
+
+    except Exception as e:
+        print("WEB3 ERROR:", e)
